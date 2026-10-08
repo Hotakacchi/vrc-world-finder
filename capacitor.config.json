@@ -1,0 +1,8 @@
+{
+  "appId": "com.hotakacchi.vrcworldfinder",
+  "appName": "VRC World Finder",
+  "webDir": "public",
+  "android": {
+    "backgroundColor": "#0f1117"
+  }
+}

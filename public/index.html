@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VRC World Finder</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>🌐 VRC World Finder</h1>
+  <div id="user" hidden>
+    <span id="user-name"></span>
+    <button id="logout" class="ghost">ログアウト</button>
+  </div>
+</header>
+
+<!-- ログイン -->
+<section id="login-view" class="panel" hidden>
+  <h2>VRChatにログイン</h2>
+  <p class="note">ワールド検索にはVRChatアカウントでのログインが必要です。ログイン情報はこのPCのサーバーからVRChatに直接送られます。</p>
+  <form id="login-form">
+    <input id="username" placeholder="ユーザー名 / メールアドレス" autocomplete="username" required>
+    <input id="password" type="password" placeholder="パスワード" autocomplete="current-password" required>
+    <button type="submit">ログイン</button>
+  </form>
+  <form id="twofa-form" hidden>
+    <p id="twofa-label"></p>
+    <input id="twofa-code" inputmode="numeric" placeholder="6桁のコード" required>
+    <button type="submit">確認</button>
+  </form>
+  <p id="login-error" class="error"></p>
+</section>
+
+<!-- 検索 -->
+<section id="search-view" hidden>
+  <form id="search-form" class="search-bar">
+    <input id="query" type="search" placeholder="ワールド名・キーワードで検索">
+    <select id="sort">
+      <option value="popularity">人気順</option>
+      <option value="heat">話題順</option>
+      <option value="favorites">お気に入り数順</option>
+      <option value="publicationDate">新着順</option>
+      <option value="relevance">関連度順</option>
+    </select>
+    <label class="check"><input id="quest-only" type="checkbox" checked> Quest対応のみ</label>
+    <button type="submit">検索</button>
+  </form>
+  <div class="chips">
+    <button class="chip" data-q="">おすすめ</button>
+    <button class="chip" data-q="chill">まったり</button>
+    <button class="chip" data-q="game">ゲーム</button>
+    <button class="chip" data-q="horror">ホラー</button>
+    <button class="chip" data-q="japan">日本</button>
+    <button class="chip" data-q="avatar">アバター</button>
+    <button class="chip" data-q="music">音楽</button>
+    <button class="chip" data-q="movie">映画</button>
+  </div>
+  <p id="status" class="note"></p>
+  <div id="results" class="grid"></div>
+  <button id="more" class="wide" hidden>もっと見る</button>
+</section>
+
+<!-- 詳細 -->
+<div id="modal" class="modal" hidden>
+  <div class="modal-body">
+    <button id="modal-close" class="close" aria-label="閉じる">✕</button>
+    <img id="d-img" alt="">
+    <h2 id="d-name"></h2>
+    <p id="d-author" class="note"></p>
+    <div id="d-stats" class="stats"></div>
+    <p id="d-desc"></p>
+    <div id="d-tags" class="tags"></div>
+    <div class="invite">
+      <select id="d-type">
+        <option value="public">パブリック</option>
+        <option value="hidden">フレンド+</option>
+        <option value="friends">フレンドのみ</option>
+        <option value="private">招待のみ</option>
+      </select>
+      <select id="d-region">
+        <option value="jp">日本</option>
+        <option value="us">アメリカ西</option>
+        <option value="use">アメリカ東</option>
+        <option value="eu">ヨーロッパ</option>
+      </select>
+      <button id="d-invite">自分に招待を送る</button>
+    </div>
+    <p id="d-msg" class="note"></p>
+  </div>
+</div>
+
+<script src="vrc-native.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

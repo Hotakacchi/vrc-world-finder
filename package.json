@@ -1,0 +1,17 @@
+{
+  "name": "vrc-world-finder",
+  "version": "0.1.0",
+  "description": "Meta Questのブラウザで使うVRChatワールド検索アプリ",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/core": "^8.5.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3"
+  }
+}
