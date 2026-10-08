@@ -219,3 +219,16 @@ textarea {
   .friend-row { flex-wrap: wrap; }
   .friend-row img { width: 100%; }
 }
+
+/* アップデート */
+.update-banner {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+  padding: 12px 24px; background: #17324a; border-bottom: 1px solid var(--accent);
+}
+.update-banner span { flex: 1 1 320px; }
+.update-banner > div { display: flex; flex-wrap: wrap; gap: 8px; }
+footer {
+  display: flex; justify-content: center; align-items: center; gap: 16px;
+  padding: 24px 16px 40px; color: var(--muted); font-size: 14px;
+}
+footer button { min-height: 44px; }

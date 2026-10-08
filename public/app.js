@@ -878,6 +878,11 @@ $("modal").addEventListener("click", (e) => {
 });
 
 // ---------- 起動 ----------
+$("app-version").textContent = `VRC World Finder v${APP_VERSION}`;
+$("check-update").addEventListener("click", () => Updater.check({ manual: true }));
+Updater.markReady();
+Updater.check();
+
 (async () => {
   try {
     const r = await Vrc.currentUser();

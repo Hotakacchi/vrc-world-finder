@@ -3,7 +3,7 @@
 // ブラウザ版: PCの中継サーバー (/vrc/*) 経由。クッキーはサーバーが保存する
 const Vrc = (() => {
   const API = "https://api.vrchat.cloud/api/1";
-  const USER_AGENT = "VRCWorldFinder/0.2.0 (personal Quest world search tool)";
+  const USER_AGENT = `VRCWorldFinder/${typeof APP_VERSION === "string" ? APP_VERSION : "dev"} (personal Quest world search tool)`;
   const worldCache = new Map();
   let me = null;
 

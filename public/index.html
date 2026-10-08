@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div id="update-banner" class="update-banner" hidden>
+  <span id="update-text"></span>
+  <div id="update-actions"></div>
+</div>
 <header>
   <h1>🌐 VRC World Finder</h1>
   <div id="user" hidden>
@@ -226,6 +230,13 @@
 
 <div id="toast" class="toast" hidden></div>
 
+<footer>
+  <span id="app-version"></span>
+  <button id="check-update" class="ghost">更新を確認</button>
+</footer>
+
+<script src="version.js"></script>
+<script src="updater.js"></script>
 <script src="vrc.js"></script>
 <script src="app.js"></script>
 </body>

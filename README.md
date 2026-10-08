@@ -24,15 +24,25 @@ APKは [Releases](https://github.com/Hotakacchi/vrc-world-finder/releases/latest
 3. `C:\Android\sdk\platform-tools\adb.exe install -r VRCWorldFinder.apk`（またはSideQuestにドラッグ＆ドロップ）
 4. Questのアプリ一覧 →「提供元不明」から起動
 
-### ビルド方法
-```
-npx cap sync android
-cd android
-set JAVA_HOME=C:\Android\jdk-21.0.12.1+1
-gradlew.bat assembleDebug
-```
-APKは `android/app/build/outputs/apk/debug/app-debug.apk` に出力されます。
-画面やロジックは `public/` を編集すれば、ブラウザ版とAPK版の両方に反映されます（VRChatとの通信は `public/vrc.js`）。
+### 自動アップデート
+APK版は起動時にGitHubの最新リリースを確認します（画面下の「更新を確認」からも確認できます）。
+- **画面・ロジックの更新**: `web.zip` を自動でダウンロードし、再起動すると反映されます（再インストール不要）。うまく起動しなかった場合は自動で前の版に戻ります。
+- **APK本体の更新**: 「アプリ本体の更新があります」と表示され、ボタンでダウンロード→インストール画面が開きます。Questでアプリ内インストールが使えない場合は、PCからSideQuest/adbで入れてください。
+
+## リリース手順
+1. `package.json` の `version` を上げる（毎回）
+2. Android側（`android/` やCapacitorプラグイン）を変えたときだけ、`android/app/build.gradle` の `versionCode` と `versionName` も上げる
+3. ビルドしてリリース用ファイルを作る
+   ```
+   npm run release -- "更新内容のひとこと"
+   ```
+4. 公開する（3つのファイルを必ず全部付ける）
+   ```
+   gh release create v0.x.x dist/VRCWorldFinder.apk dist/web.zip dist/update.json --title v0.x.x --notes "..."
+   ```
+
+画面やロジックは `public/` を編集すれば、ブラウザ版とAPK版の両方に反映されます（VRChatとの通信は `public/vrc.js`、アップデートは `public/updater.js`）。
+ビルドには `C:\Android` のAndroid SDKとJDK 21を使います。
 
 ## 機能
 

@@ -9,7 +9,7 @@ const os = require("os");
 
 const PORT = Number(process.env.PORT) || 3939;
 const API = "https://api.vrchat.cloud/api/1";
-const USER_AGENT = "VRCWorldFinder/0.2.0 (personal Quest world search tool)";
+const USER_AGENT = `VRCWorldFinder/${require("./package.json").version} (personal Quest world search tool)`;
 const SESSION_FILE = path.join(__dirname, ".session.json");
 const PUBLIC_DIR = path.join(__dirname, "public");
 

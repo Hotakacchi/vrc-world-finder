@@ -2,3 +2,4 @@
 node_modules/
 VRCWorldFinder.apk
 .claude/
+dist/
