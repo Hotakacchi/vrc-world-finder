@@ -10,6 +10,7 @@
 <header>
   <h1>🌐 VRC World Finder</h1>
   <div id="user" hidden>
+    <label class="check"><input id="quest-only" type="checkbox"> Quest対応のみ</label>
     <span id="user-name"></span>
     <button id="logout" class="ghost">ログアウト</button>
   </div>
@@ -18,7 +19,7 @@
 <!-- ログイン -->
 <section id="login-view" class="panel" hidden>
   <h2>VRChatにログイン</h2>
-  <p class="note">ワールド検索にはVRChatアカウントでのログインが必要です。ログイン情報はこのPCのサーバーからVRChatに直接送られます。</p>
+  <p class="note">ワールドの検索にはVRChatアカウントでのログインが必要です。ログイン情報はVRChatにだけ送られます。</p>
   <form id="login-form">
     <input id="username" placeholder="ユーザー名 / メールアドレス" autocomplete="username" required>
     <input id="password" type="password" placeholder="パスワード" autocomplete="current-password" required>
@@ -32,34 +33,145 @@
   <p id="login-error" class="error"></p>
 </section>
 
-<!-- 検索 -->
-<section id="search-view" hidden>
-  <form id="search-form" class="search-bar">
-    <input id="query" type="search" placeholder="ワールド名・キーワードで検索">
-    <select id="sort">
-      <option value="popularity">人気順</option>
-      <option value="heat">話題順</option>
-      <option value="favorites">お気に入り数順</option>
-      <option value="publicationDate">新着順</option>
-      <option value="relevance">関連度順</option>
-    </select>
-    <label class="check"><input id="quest-only" type="checkbox" checked> Quest対応のみ</label>
-    <button type="submit">検索</button>
-  </form>
-  <div class="chips">
-    <button class="chip" data-q="">おすすめ</button>
-    <button class="chip" data-q="chill">まったり</button>
-    <button class="chip" data-q="game">ゲーム</button>
-    <button class="chip" data-q="horror">ホラー</button>
-    <button class="chip" data-q="japan">日本</button>
-    <button class="chip" data-q="avatar">アバター</button>
-    <button class="chip" data-q="music">音楽</button>
-    <button class="chip" data-q="movie">映画</button>
-  </div>
-  <p id="status" class="note"></p>
-  <div id="results" class="grid"></div>
-  <button id="more" class="wide" hidden>もっと見る</button>
-</section>
+<div id="app" hidden>
+  <nav class="tabs">
+    <button class="tab" data-tab="search">🔍 検索</button>
+    <button class="tab" data-tab="ranking">🔥 ランキング</button>
+    <button class="tab" data-tab="gacha">🎲 ガチャ</button>
+    <button class="tab" data-tab="favorites">⭐ お気に入り</button>
+    <button class="tab" data-tab="recent">🕘 最近</button>
+    <button class="tab" data-tab="friends">👥 フレンド</button>
+    <button class="tab" data-tab="wish">📝 行きたい</button>
+  </nav>
+
+  <!-- 検索 -->
+  <section id="view-search" class="view">
+    <form id="search-form" class="search-bar">
+      <input id="query" type="search" placeholder="ワールド名・キーワードで検索">
+      <select id="sort">
+        <option value="popularity">人気順</option>
+        <option value="heat">話題順</option>
+        <option value="favorites">お気に入り数順</option>
+        <option value="publicationDate">新着順</option>
+        <option value="relevance">関連度順</option>
+      </select>
+      <button type="submit">検索</button>
+    </form>
+    <div class="chips">
+      <button class="chip" data-q="">おすすめ</button>
+      <button class="chip" data-q="chill">まったり</button>
+      <button class="chip" data-q="game">ゲーム</button>
+      <button class="chip" data-q="horror">ホラー</button>
+      <button class="chip" data-q="japan">日本</button>
+      <button class="chip" data-q="avatar">アバター</button>
+      <button class="chip" data-q="music">音楽</button>
+      <button class="chip" data-q="movie">映画</button>
+    </div>
+    <details id="filters" class="filters">
+      <summary>詳細フィルター <span id="filter-count"></span></summary>
+      <div class="filter-grid">
+        <label>定員
+          <span class="range"><input id="f-cap-min" type="number" min="0" placeholder="下限"> 〜 <input id="f-cap-max" type="number" min="0" placeholder="上限"></span>
+        </label>
+        <label>今いる人数
+          <span class="range"><input id="f-occ-min" type="number" min="0" placeholder="下限"> 〜 <input id="f-occ-max" type="number" min="0" placeholder="上限"></span>
+        </label>
+        <label>お気に入り数
+          <span class="range"><input id="f-fav-min" type="number" min="0" placeholder="下限"></span>
+        </label>
+        <label>公開時期
+          <select id="f-pub">
+            <option value="">指定なし</option>
+            <option value="7">1週間以内</option>
+            <option value="30">1か月以内</option>
+            <option value="90">3か月以内</option>
+            <option value="365">1年以内</option>
+          </select>
+        </label>
+        <label class="check"><input id="f-jp" type="checkbox"> 日本語のワールドだけ</label>
+        <label class="check"><input id="f-unvisited" type="checkbox"> 行ったことがないワールドだけ</label>
+      </div>
+      <div class="row">
+        <button id="f-apply" type="button">この条件で検索</button>
+        <button id="f-clear" type="button" class="ghost">条件をクリア</button>
+      </div>
+    </details>
+    <p id="search-status" class="note"></p>
+    <div id="search-results" class="grid"></div>
+    <button id="search-more" class="wide" hidden>もっと見る</button>
+  </section>
+
+  <!-- ランキング -->
+  <section id="view-ranking" class="view" hidden>
+    <div class="row">
+      <div class="seg">
+        <button class="seg-btn active" data-rank="rising">📈 急上昇</button>
+        <button class="seg-btn" data-rank="gems">💎 穴場</button>
+      </div>
+      <button id="rank-refresh" class="ghost">再集計</button>
+    </div>
+    <p id="rank-desc" class="note"></p>
+    <p id="rank-status" class="note"></p>
+    <div id="rank-results" class="grid"></div>
+  </section>
+
+  <!-- ガチャ -->
+  <section id="view-gacha" class="view" hidden>
+    <div class="gacha-controls">
+      <input id="g-keyword" placeholder="ジャンル・キーワード（空欄でなんでも）">
+      <select id="g-minfav">
+        <option value="0">人気は問わない</option>
+        <option value="100">⭐100以上</option>
+        <option value="1000">⭐1000以上</option>
+      </select>
+      <label class="check"><input id="g-unvisited" type="checkbox" checked> 行ったことがないワールドだけ</label>
+      <label class="check"><input id="g-jp" type="checkbox"> 日本語のワールドだけ</label>
+      <button id="g-pull" class="big">🎲 ガチャを回す</button>
+    </div>
+    <p id="gacha-status" class="note"></p>
+    <div id="gacha-result"></div>
+  </section>
+
+  <!-- お気に入り -->
+  <section id="view-favorites" class="view" hidden>
+    <div class="row"><button id="fav-refresh" class="ghost">再読み込み</button></div>
+    <p id="fav-status" class="note"></p>
+    <div id="fav-results"></div>
+  </section>
+
+  <!-- 最近 -->
+  <section id="view-recent" class="view" hidden>
+    <div class="row"><button id="recent-refresh" class="ghost">再読み込み</button></div>
+    <p id="recent-status" class="note"></p>
+    <div id="recent-results" class="grid"></div>
+  </section>
+
+  <!-- フレンド -->
+  <section id="view-friends" class="view" hidden>
+    <div class="row"><button id="friends-refresh" class="ghost">再読み込み</button></div>
+    <p id="friends-status" class="note"></p>
+    <div id="friends-results"></div>
+    <div id="friends-others"></div>
+  </section>
+
+  <!-- 行きたいリスト -->
+  <section id="view-wish" class="view" hidden>
+    <div class="row">
+      <div class="seg">
+        <button class="seg-btn active" data-wish="all">すべて</button>
+        <button class="seg-btn" data-wish="todo">まだ行ってない</button>
+        <button class="seg-btn" data-wish="done">行った</button>
+      </div>
+      <select id="wish-sort">
+        <option value="added">追加が新しい順</option>
+        <option value="rating">評価が高い順</option>
+        <option value="name">名前順</option>
+      </select>
+    </div>
+    <p id="wish-status" class="note"></p>
+    <div id="wish-results" class="grid"></div>
+  </section>
+</div>
 
 <!-- 詳細 -->
 <div id="modal" class="modal" hidden>
@@ -69,9 +181,31 @@
     <h2 id="d-name"></h2>
     <p id="d-author" class="note"></p>
     <div id="d-stats" class="stats"></div>
+
+    <div class="row actions">
+      <button id="d-wish" class="secondary"></button>
+      <select id="d-fav-group"></select>
+      <button id="d-fav" class="secondary"></button>
+      <a id="d-youtube" class="link-btn" target="_blank" rel="noopener" hidden>▶ 紹介動画</a>
+    </div>
+
+    <div id="d-wish-panel" class="wish-panel" hidden>
+      <div class="row">
+        <span>評価</span>
+        <div id="d-stars" class="stars"></div>
+        <label class="check"><input id="d-visited" type="checkbox"> 行った</label>
+      </div>
+      <textarea id="d-memo" rows="3" placeholder="メモ（誰と行きたい、何が良かった、など）"></textarea>
+    </div>
+
     <p id="d-desc"></p>
     <div id="d-tags" class="tags"></div>
-    <div class="invite">
+
+    <h3>開いているインスタンス</h3>
+    <div id="d-instances" class="instances"><p class="note">読み込み中…</p></div>
+
+    <h3>新しく作って入る</h3>
+    <div class="row">
       <select id="d-type">
         <option value="public">パブリック</option>
         <option value="hidden">フレンド+</option>
@@ -84,13 +218,15 @@
         <option value="use">アメリカ東</option>
         <option value="eu">ヨーロッパ</option>
       </select>
-      <button id="d-invite">自分に招待を送る</button>
+      <button id="d-invite">作って自分に招待</button>
     </div>
     <p id="d-msg" class="note"></p>
   </div>
 </div>
 
-<script src="vrc-native.js"></script>
+<div id="toast" class="toast" hidden></div>
+
+<script src="vrc.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
